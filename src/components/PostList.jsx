@@ -4,17 +4,12 @@ import NewPost from "./NewPost";
 import Modal from "./Modal";
 import classes from "./PostList.module.css";
 
-const PostList = () => {
-// state for modal to display and hide
-  const [modelVisible, setModelVisible] = useState(true);
+const PostList = ({isPosting, onStopPost}) => {
+
 //state for input text
   const [inputText, setInputText] = useState("");
 //state for author name
   const [author, setAuthor] = useState("");
-
-  function hideModalHandler() {
-    setModelVisible(false);
-  }
 
   function changeBodyHandler(event) {
     setInputText(event.target.value);
@@ -24,8 +19,8 @@ const PostList = () => {
   }
   return (
     <>
-      {modelVisible && (
-        <Modal onClose={hideModalHandler}>
+      {isPosting && (
+        <Modal onClose={onStopPost}>
           <NewPost
             onBodyChange={changeBodyHandler}
             onAuthorchange={changeAuthorHandler}
