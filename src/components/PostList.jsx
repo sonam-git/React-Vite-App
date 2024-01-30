@@ -5,33 +5,34 @@ import Modal from "./Modal";
 import classes from "./PostList.module.css";
 
 const PostList = ({isPosting, onStopPost}) => {
+const [posts, setPosts] = useState([])
 
-//state for input text
-  const [inputText, setInputText] = useState("");
-//state for author name
-  const [author, setAuthor] = useState("");
-
-  function changeBodyHandler(event) {
-    setInputText(event.target.value);
-  }
-  function changeAuthorHandler(event) {
-    setAuthor(event.target.value);
-  }
+function addPostHandler(postData){
+  setPosts((existingPosts) => [postData, ...existingPosts]);
+}
   return (
     <>
       {isPosting && (
         <Modal onClose={onStopPost}>
           <NewPost
-            onBodyChange={changeBodyHandler}
-            onAuthorchange={changeAuthorHandler}
+            onCancel={onStopPost}
+            onAddPost={addPostHandler}
           />
         </Modal>
       )}
-
+{posts.length > 0 && (
       <ul className={classes.posts}>
-        <Post author={author} body={inputText} />
-        <Post author="Max" body="This is Max Post" />
+      {
+        posts.map((post, index)=> <Post key={index} author={post.author} body={post.body}/>)
+      }
       </ul>
+      )} 
+      {posts.length === 0 && (
+        <div style={{textAlign: 'center', color: 'white'}}>
+          <h2> There are no posts yet.</h2>
+          <p>Start adding some!</p>
+        </div>
+      )}
     </>
   );
 };
